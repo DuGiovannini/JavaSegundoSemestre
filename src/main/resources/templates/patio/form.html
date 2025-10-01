@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cadastro de Pátio</title>
+</head>
+<body>
+<div th:replace="fragments :: header"></div>
+
+<h1 th:text="${patio.idPatio == null} ? 'Novo Pátio' : 'Editar Pátio'"></h1>
+
+<form th:action="@{/patios}" th:object="${patio}" method="post">
+    <input type="hidden" th:field="*{idPatio}" />
+
+    <label>Localização:</label>
+    <input type="text" th:field="*{localizacao}" /><br/>
+
+    <label>Capacidade:</label>
+    <input type="number" th:field="*{capacidade}" /><br/>
+
+    <button type="submit">Salvar</button>
+</form>
+
+<a th:href="@{/patios}">Voltar</a>
+
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

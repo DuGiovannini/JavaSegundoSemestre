@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}">Home</title>
+</head>
+<body>
+    <!-- inclui o header -->
+    <div th:replace="fragments :: header"></div>
+
+    <main style="padding:20px;">
+        <h1 th:text="${titulo}"></h1>
+        <p>Bem-vindo ao sistema de gestão de frotas 🚀</p>
+    </main>
+
+    <!-- inclui o footer -->
+    <div th:replace="fragments :: footer"></div>
+</body>
+</html>

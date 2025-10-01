@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestão de Frotas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        nav {
+            margin-bottom: 15px;
+        }
+        nav a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: darkblue;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: gray;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho / Menu -->
+    <div th:fragment="header">
+        <nav>
+            <a th:href="@{/}">Home</a> |
+            <a th:href="@{/patios}">Pátios</a> |
+            <a th:href="@{/motos}">Motos</a> |
+            <a th:href="@{/relatorios/ocupacao}">Relatório de Ocupação</a> |
+            <a th:href="@{/logout}">Sair</a>
+        </nav>
+        <hr/>
+    </div>
+
+    <!-- Rodapé -->
+    <div th:fragment="footer">
+        <hr/>
+        <footer>
+            <p>FIAP • Challenge Mottu - Gestão Inteligente de Frotas 🚀</p>
+        </footer>
+    </div>
+</body>
+</html>

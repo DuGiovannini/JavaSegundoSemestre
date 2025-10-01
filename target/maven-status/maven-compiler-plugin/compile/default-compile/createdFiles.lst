@@ -1,0 +1,15 @@
+br\com\mottu\challenge\controller\MotoController.class
+br\com\mottu\challenge\controller\HomeController.class
+br\com\mottu\challenge\repository\MotoRepository.class
+br\com\mottu\challenge\dto\PatioOcupacaoDTO.class
+br\com\mottu\challenge\domain\Patio.class
+br\com\mottu\challenge\config\SecurityConfig.class
+br\com\mottu\challenge\controller\PatioController.class
+br\com\mottu\challenge\service\RelatorioService.class
+br\com\mottu\challenge\controller\LoginController.class
+br\com\mottu\challenge\controller\RelatorioController.class
+br\com\mottu\challenge\domain\Moto.class
+br\com\mottu\challenge\ChallengeApplication.class
+br\com\mottu\challenge\domain\Role.class
+br\com\mottu\challenge\domain\Usuario.class
+br\com\mottu\challenge\repository\PatioRepository.class
