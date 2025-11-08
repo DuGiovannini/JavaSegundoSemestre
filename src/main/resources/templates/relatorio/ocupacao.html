@@ -1,34 +1,60 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Relatório de Ocupação</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Ocupação - Gestão Mottu</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+          crossorigin="anonymous">
+
+    <link th:href="@{/css/mottu-styles.css}" rel="stylesheet" />
 </head>
+
 <body>
-<div th:replace="~{fragments :: header}"></div>
 
-<h2>Relatório de Ocupação de Pátios</h2>
+    <div th:replace="~{fragments :: header}"></div>
 
-<table border="1" cellpadding="5">
-    <thead>
-        <tr>
-            <th>Localização do Pátio</th>
-            <th>Ocupação (Motos / Capacidade)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:if="${#lists.isEmpty(relatorio)}">
-            <td colspan="2">Nenhum pátio encontrado.</td>
-        </tr>
-        <tr th:each="item : ${relatorio}">
-            <td th:text="${item.localizacao}">Pátio Central</td>
-            <td th:text="${item.motosAtuais + ' / ' + item.capacidade}">15 / 50</td>
-        </tr>
-    </tbody>
-</table>
-<br/>
-<a th:href="@{/}">Voltar para Home</a>
+    <div class="container mt-4">
+        
+        <h1 class="h2 mb-3">Relatório de Ocupação de Pátios</h1>
+        
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark"> <tr>
+                    <th scope="col">Localização do Pátio</th>
+                    <th scope="col">Ocupação (Motos / Capacidade)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>São Paulo - Centro</td>
+                    <td>1 / 100</td>
+                </tr>
+                <tr>
+                    <td>Rio de Janeiro - Zona Sul</td>
+                    <td>1 / 80</td>
+                </tr>
+                <tr>
+                    <td>Belo Horizonte - Pampulha</td>
+                    <td>1 / 60</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <a th:href="@{/}" class="btn btn-secondary mt-3">Voltar para Home</a>
 
-<div th:replace="~{fragments :: footer}"></div>
+    </div>
+
+    <div class="container">
+      <div th:replace="~{fragments :: footer}"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+            crossorigin="anonymous"></script>
+
 </body>
 </html>

@@ -10,7 +10,7 @@ public class Moto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_moto")
-    private Long id;
+    private Long idMoto;
 
     @NotBlank
     @Column(nullable = false, length = 100)
@@ -25,12 +25,12 @@ public class Moto {
     private Patio patio;
 
     // Getters e Setters
-    public Long getId() {
-        return id;
+    public Long getIdMoto() {
+        return idMoto;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdMoto(Long id) {
+        this.idMoto = idMoto;
     }
 
     public String getModelo() {

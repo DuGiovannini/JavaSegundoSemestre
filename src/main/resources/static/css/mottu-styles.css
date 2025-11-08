@@ -1,0 +1,52 @@
+/* ---- Paleta de Cores (Sugestão) ---- */
+:root {
+    --mottu-green: #00B47E; /* Verde principal da Mottu */
+    --mottu-dark: #212529;  /* Um preto/cinza escuro do Bootstrap */
+    --mottu-light: #f8f9fa; /* Um branco/cinza claro do Bootstrap */
+    --mottu-bg-light-green: #f2f9f6; /* Verde pastel BEM claro para o fundo */
+}
+
+/* ---- Estilos de Navegação ---- */
+
+/* Usamos a classe 'mottu-nav' que colocamos no HTML */
+.mottu-nav {
+    background-color: var(--mottu-dark) !important; /* Fundo preto/escuro */
+    border-bottom: 4px solid var(--mottu-green);   /* Borda verde embaixo */
+}
+
+/* Muda a cor do link ATIVO para o verde Mottu */
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--mottu-green) !important;
+}
+
+/* ---- Estilos Gerais ---- */
+
+/* Movemos seu CSS antigo para cá */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--mottu-bg-light-green);
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: gray;
+    text-align: center;
+}
+
+/* ---- Estilos de Botões ---- */
+
+/* Botão verde principal da Mottu */
+.btn-mottu-green {
+    background-color: var(--mottu-green);
+    border-color: var(--mottu-green);
+    color: #ffffff; /* Texto branco */
+}
+
+/* Efeito 'hover' (passar o mouse) */
+.btn-mottu-green:hover {
+    background-color: #009a6a; /* Um tom de verde um pouco mais escuro */
+    border-color: #009a6a;
+    color: #ffffff;
+}
