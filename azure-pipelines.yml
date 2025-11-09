@@ -1,0 +1,89 @@
+# azure-pipelines.yml
+
+trigger:
+  branches:
+    include:
+      - master # Dispara a cada alteração no branch master (Regra II)
+
+variables:
+  # PREENCHA ESTAS 3 VARIÁVEIS COM SEUS NOMES REAIS:
+  azureServiceConnection: 'azure-sprint4' 
+  acrName: 'meuregistrysprint4' 
+  appName: 'sprint4' 
+  #----------------------------------------------------
+  
+  imageRepository: 'java-app' 
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)' 
+  vmImage: 'ubuntu-latest' 
+
+stages:
+- stage: CI_Build
+  displayName: 'CI - Build, Testes e Docker'
+  jobs:
+  - job: BuildAndPush
+    displayName: 'Compilar e Publicar Imagem'
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    
+    # 1. Build da Aplicação Java (CI: build + testes automáticos)
+    - task: Maven@3
+      displayName: 'Rodar Build e Testes Automáticos' 
+      inputs:
+        mavenPomFile: 'pom.xml' 
+        goals: 'package'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        jdkVersionOption: '21' # Ajuste sua versão Java
+        
+    # 2. Login no Azure Container Registry (ACR)
+    - task: AzureContainerRegistry@1
+      displayName: 'Login no ACR'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        acrName: $(acrName)
+        
+    # 3. Construção da Imagem Docker (Obrigatório - Regra V)
+    - task: Docker@2
+      displayName: 'Construir Imagem Docker'
+      inputs:
+        command: 'build'
+        containerRegistry: $(acrName)
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        tags: |
+          $(tag)
+          latest
+
+    # 4. Push da Imagem para o ACR (Publicação do Artefato)
+    - task: Docker@2
+      displayName: 'Push Imagem para o ACR'
+      inputs:
+        command: 'push'
+        containerRegistry: $(acrName)
+        repository: $(imageRepository)
+        tags: |
+          $(tag)
+          latest
+
+- stage: CD_Deploy
+  displayName: 'CD - Deploy no Azure'
+  dependsOn: CI_Build 
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: 'Deploy Automático no Azure Web App' # CD: deploy automático (Regra 7.b)
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    
+    # 1. Deploy no Azure Web App (Regra VII)
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy para Azure Web App'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        WebAppName: $(appName)
+        appType: 'webAppContainer' 
+        # Especifica a imagem no ACR que será usada para o deploy
+        imageName: '$(acrName).azurecr.io/$(imageRepository):$(tag)'
