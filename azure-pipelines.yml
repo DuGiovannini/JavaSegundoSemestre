@@ -36,14 +36,21 @@ stages:
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         jdkVersionOption: '21' # Ajuste sua versão Java
+
+    # 2. Login no Azure Container Registry (ACR) via AZ CLI
+    - task: AzureCLI@2
+      displayName: 'Login no ACR'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az acr login --name $(acrName)'
         
     # 3. Construção da Imagem Docker (Obrigatório - Regra V)
     - task: Docker@2
       displayName: 'Construir Imagem Docker'
       inputs:
         command: 'build'
-        containerRegistry: $(acrName).azurecr.io
-        azureSubscription: $(azureServiceConnection)
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         tags: |
@@ -55,8 +62,6 @@ stages:
       displayName: 'Push Imagem para o ACR'
       inputs:
         command: 'push'
-        containerRegistry: $(acrName).azurecr.io
-        azureSubscription: $(azureServiceConnection)
         repository: $(imageRepository)
         tags: |
           $(tag)
