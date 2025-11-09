@@ -3,7 +3,7 @@
 trigger:
   branches:
     include:
-      - master # Dispara a cada alteração no branch master (Regra II)
+      - main # Dispara a cada alteração no branch master (Regra II)
 
 variables:
   # PREENCHA ESTAS 3 VARIÁVEIS COM SEUS NOMES REAIS:
