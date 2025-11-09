@@ -42,7 +42,7 @@ stages:
       displayName: 'Construir Imagem Docker'
       inputs:
         command: 'build'
-        containerRegistry: $(acrName)
+        containerRegistry: $(acrName).azurecr.io
         azureSubscription: $(azureServiceConnection)
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
@@ -55,7 +55,7 @@ stages:
       displayName: 'Push Imagem para o ACR'
       inputs:
         command: 'push'
-        containerRegistry: $(acrName)
+        containerRegistry: $(acrName).azurecr.io
         azureSubscription: $(azureServiceConnection)
         repository: $(imageRepository)
         tags: |
