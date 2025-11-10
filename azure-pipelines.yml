@@ -78,11 +78,12 @@ stages:
     steps:
     
     # 1. Deploy no Azure Web App (Regra VII)
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Deploy para Azure Web App'
-      inputs:
-        azureSubscription: $(azureServiceConnection)
-        WebAppName: $(appName)
-        appType: 'webAppContainer' 
-        # Especifica a imagem no ACR que será usada para o deploy
-        imageName: '$(acrName).azurecr.io/$(imageRepository):$(tag)'
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy para Azure Web App'
+  inputs:
+    azureSubscription: $(azureServiceConnection)
+    WebAppName: $(appName)
+    appType: 'webAppContainer'
+    DockerNamespace: $(acrName)
+    DockerRepository: $(imageRepository)
+    DockerImageTag: $(tag)
