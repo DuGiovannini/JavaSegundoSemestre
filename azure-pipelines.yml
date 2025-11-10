@@ -10,6 +10,7 @@ variables:
   azureServiceConnection: 'azure-sprint4' 
   acrName: 'meuregistrysprint4' 
   appName: 'sprint4' 
+  group: ACR-Secrets
   #----------------------------------------------------
   
   imageRepository: 'java-app' 
@@ -37,16 +38,16 @@ stages:
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         jdkVersionOption: '21' # Ajuste sua versão Java
 
-    # 2. Login no Azure Container Registry (ACR) via AZ CLI
-    - task: AzureCLI@2
-      displayName: 'Login no ACR'
+    # 2. Login no ACR (Direto com Usuário/Senha Secreta)
+    - task: Docker@2
+      displayName: 'Docker Login no ACR'
       inputs:
-        azureSubscription: $(azureServiceConnection)
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az acr login --name $(acrName)'
-        
-    # 3. Construção da Imagem Docker (Obrigatório - Regra V)
+        command: 'login'
+        containerRegistry: '$(acrName).azurecr.io'
+        username: '$(ACR_USER)'
+        password: '$(ACR_PASS)'
+
+    # 3. Construção da Imagem Docker (Task Docker@2 - Build)
     - task: Docker@2
       displayName: 'Construir Imagem Docker'
       inputs:
@@ -57,7 +58,7 @@ stages:
           $(tag)
           latest
 
-    # 4. Push da Imagem para o ACR (Publicação do Artefato)
+    # 4. Push da Imagem para o ACR (Task Docker@2 - Push)
     - task: Docker@2
       displayName: 'Push Imagem para o ACR'
       inputs:
