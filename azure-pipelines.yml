@@ -28,45 +28,41 @@ stages:
       vmImage: $(vmImage)
     steps:
     
-    # 1. Build da Aplicação Java (Maven)
+    # 1. Rodar Build e Testes Automáticos (Maven/Java 21)
     - task: Maven@3
       displayName: 'Rodar Build e Testes Automáticos' 
       inputs:
         mavenPomFile: 'pom.xml'
         goals: 'package'
         jdkVersionOption: '21'
-
-# 2. Construção da Imagem Docker (Não precisa de login para construir)
+    
+    # 2. Login no Azure Container Registry (ACR) via AZ CLI
+    - task: AzureCLI@2
+      displayName: 'Login no ACR'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az acr login --name $(acrName)'
+    
+    # 3. Construção da Imagem Docker (Obrigatório - Regra V)
     - task: Docker@2
       displayName: 'Construir Imagem Docker'
       inputs:
         command: 'build'
+        # Credenciais não são necessárias aqui, o Build acontece localmente.
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         tags: |
           $(tag)
           latest
-
-# 3. Push Imagem para o ACR (Autenticação Explícita: Usuário/Senha)
+    
+    # 4. Push da Imagem para o ACR (Publicação do Artefato)
     - task: Docker@2
       displayName: 'Push Imagem para o ACR'
       inputs:
         command: 'push'
-        # O campo 'containerRegistry' deve ser o URL do seu ACR
-        containerRegistry: '$(acrName).azurecr.io' 
-        # Força o login com as credenciais secretas:
-        username: '$(ACR_USER)' # <--- VARIÁVEL SECRETA
-        password: '$(ACR_PASS)' # <--- VARIÁVEL SECRETA
-        repository: $(imageRepository)
-        tags: |
-          $(tag)
-          latest
-
-    # 4. Push da Imagem para o ACR (Task Docker@2 - Push)
-    - task: Docker@2
-      displayName: 'Push Imagem para o ACR'
-      inputs:
-        command: 'push'
+        # Credenciais não são necessárias aqui, o login foi feito pelo AZ CLI.
         repository: $(imageRepository)
         tags: |
           $(tag)
