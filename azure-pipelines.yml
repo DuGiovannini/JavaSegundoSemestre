@@ -68,22 +68,23 @@ stages:
 
 - stage: CD_Deploy
   displayName: 'CD - Deploy no Azure'
-  dependsOn: CI_Build 
+  dependsOn: CI_Build # Garante que o Deploy só ocorra se o Build for bem-sucedido
   condition: succeeded()
   jobs:
   - job: Deploy
-    displayName: 'Deploy Automático no Azure Web App' # CD: deploy automático (Regra 7.b)
+    displayName: 'Deploy Automático no Azure Web App'
     pool:
       vmImage: $(vmImage)
     steps:
     
-    # 1. Deploy no Azure Web App (Regra VII)
-- task: AzureRmWebAppDeployment@4
-  displayName: 'Deploy para Azure Web App'
-  inputs:
-    azureSubscription: $(azureServiceConnection)
-    WebAppName: $(appName)
-    appType: 'webAppContainer'
-    DockerNamespace: $(acrName)
-    DockerRepository: $(imageRepository)
-    DockerImageTag: $(tag)
+    # Task de Deploy no Azure Web App (Regra VII)
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy para Azure Web App'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        WebAppName: $(appName)
+        appType: 'webAppContainer' 
+        
+        DockerNamespace: '$(acrName)'     # O nome do seu ACR (Ex: meuregistrysprint4)
+        DockerRepository: 'java-app'      # O nome do repositório dentro do ACR (Valor da sua variável imageRepository, assumindo 'java-app')
+        DockerImageTag: '$(tag)'          # A tag da imagem a ser implantada
