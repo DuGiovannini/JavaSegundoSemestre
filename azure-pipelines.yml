@@ -10,10 +10,8 @@ variables:
   azureServiceConnection: 'azure-sprint4' 
   acrName: 'meuregistrysprint4' 
   appName: 'sprint4' 
-  group: ACR-Secrets
-  #----------------------------------------------------
-  
-  imageRepository: 'java-app' 
+  group: ACR-Secrets  
+  imageRepository: '$(acrName).azurecr.io/java-app'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)' 
   vmImage: 'ubuntu-latest' 
