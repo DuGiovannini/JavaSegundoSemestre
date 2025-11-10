@@ -28,32 +28,36 @@ stages:
       vmImage: $(vmImage)
     steps:
     
-    # 1. Build da Aplicação Java (CI: build + testes automáticos)
+    # 1. Build da Aplicação Java (Maven)
     - task: Maven@3
       displayName: 'Rodar Build e Testes Automáticos' 
       inputs:
-        mavenPomFile: 'pom.xml' 
+        mavenPomFile: 'pom.xml'
         goals: 'package'
-        publishJUnitResults: true
-        testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        jdkVersionOption: '21' # Ajuste sua versão Java
+        jdkVersionOption: '21'
 
-    # 2. Login no ACR (Direto com Usuário/Senha Secreta)
-    - task: Docker@2
-      displayName: 'Docker Login no ACR'
-      inputs:
-        command: 'login'
-        containerRegistry: '$(acrName).azurecr.io'
-        username: '$(ACR_USER)'
-        password: '$(ACR_PASS)'
-
-    # 3. Construção da Imagem Docker (Task Docker@2 - Build)
+# 2. Construção da Imagem Docker (Não precisa de login para construir)
     - task: Docker@2
       displayName: 'Construir Imagem Docker'
       inputs:
         command: 'build'
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
+        tags: |
+          $(tag)
+          latest
+
+# 3. Push Imagem para o ACR (Autenticação Explícita: Usuário/Senha)
+    - task: Docker@2
+      displayName: 'Push Imagem para o ACR'
+      inputs:
+        command: 'push'
+        # O campo 'containerRegistry' deve ser o URL do seu ACR
+        containerRegistry: '$(acrName).azurecr.io' 
+        # Força o login com as credenciais secretas:
+        username: '$(ACR_USER)' # <--- VARIÁVEL SECRETA
+        password: '$(ACR_PASS)' # <--- VARIÁVEL SECRETA
+        repository: $(imageRepository)
         tags: |
           $(tag)
           latest
